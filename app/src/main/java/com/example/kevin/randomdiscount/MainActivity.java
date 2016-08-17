@@ -1,5 +1,6 @@
 package com.example.kevin.randomdiscount;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +28,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        b = (Button)findViewById(R.id.random);
+        String record = readFromFile(this);
+        if (!record.equals("")) {
+            String[] data = record.split(",");
+            for (int i = 0; i < data.length; i++) {
+                try {
+                    count[i] = Integer.parseInt(data[i]);
+                } catch (NumberFormatException nfe) {
+                    //NOTE: write something here if you need to recover from formatting errors
+                };
+                Log.d("print", count[i]+"\n");
+            }
+        }
+
+        b = (Button) findViewById(R.id.random);
         e = (EditText)findViewById(R.id.origin_price);
         p = (TextView)findViewById(R.id.percent);
         value_view = (TextView)findViewById(R.id.value);
@@ -48,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < discount.length; i++) {
                         culm += discount[i] + ":" + count[i] + "\n";
                     }
-                    Log.d("print", "in");
+                    //Log.d("print", "in");
                     p.setText(s);
                     origin_cost.setText(e.getText() + "元");
                     origin_cost.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -63,6 +84,59 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        String output = "";
+        for (int i = 0; i < count.length; i++) {
+            output += count[i];
+            if(i!=count.length-1) {
+                output += ",";
+            }
+        }
+        Log.d("print", output);
+        writeToFile(output, this);
+    }
+
+    private void writeToFile(String data, Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("record", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+    private String readFromFile(Context context) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("record");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 }
