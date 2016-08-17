@@ -20,16 +20,19 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private Button b;
-    private TextView p, value_view, origin_cost;
+    private TextView p, value_view, origin_cost, record_view;
     private EditText e;
     int discount[] = {89,79,69,59,49,1};
     int count[] = {0,0,0,0,0,0};
+    String output;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String record = readFromFile(this);
+        record_view = (TextView)findViewById(R.id.record);
         if (!record.equals("")) {
+            record_view.setText(record);
             String[] data = record.split(",");
             for (int i = 0; i < data.length; i++) {
                 try {
@@ -81,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     value_view.setText(value + "元");
                     e.setText("");
+                    output = "";
+                    for (int i = 0; i < count.length; i++) {
+                        output += count[i];
+                        if(i!=count.length-1) {
+                            output += ",";
+                        }
+                    }
+                    record_view.setText(output);
                 }
             }
         });
@@ -89,13 +100,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        String output = "";
-        for (int i = 0; i < count.length; i++) {
-            output += count[i];
-            if(i!=count.length-1) {
-                output += ",";
-            }
-        }
         Log.d("print", output);
         writeToFile(output, this);
     }
