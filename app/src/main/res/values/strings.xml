@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RandomDiscount</string>
+    <string name="random">抽</string>
+    <string name="origin_price">請輸入金額</string>
+    <string name="Value">折價後金額</string>
+    <string name="origin_cost">原價</string>
 </resources>

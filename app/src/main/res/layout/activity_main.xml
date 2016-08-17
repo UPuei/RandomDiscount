@@ -13,17 +13,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/percent"
+        android:textSize="30sp"
+        android:text="\?折"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="50sp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Random"
+        android:text="@string/random"
         android:id="@+id/random"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_alignEnd="@+id/origin_price"
+        android:layout_marginBottom="26dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/origin_price"
+        android:layout_marginBottom="34dp"
+        android:hint="@string/origin_price"
+        android:phoneNumber="false"
+        android:numeric="integer"
+        android:textAlignment="center"
+        android:layout_above="@+id/random"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/value"
+        android:text="@string/Value"
+        android:textSize="50sp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="33dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/origin_cost"
+        android:id="@+id/origin_cost"
+        android:textSize="35sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_below="@+id/value"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="33dp" />
 
 </RelativeLayout>
